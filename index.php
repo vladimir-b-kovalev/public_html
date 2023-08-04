@@ -11,6 +11,15 @@
 			th {text-align: left; font: 12px Arial; background: #efefef;}
 			button {font: 12px Arial; text-align: left;}
 		</style>
+		<?php
+//			print_r(PDO::getAvailableDrivers());
+			try {  
+				$db_connection = new \PDO("pgsql:host=localhost;port=5433;dbname=esadb;user=postgres;password=Immelstorn");  
+			}  
+			catch(PDOException $e) {  
+				echo $e->getMessage();  
+			}
+		?>
 	</head>
 	<body>
 		<header>НЕСКОЛЬКО ПОЛЕЗНЫХ УТИЛИТ</header>
@@ -29,7 +38,9 @@
 			</td>
 			<td width="80%" valign="top">
 			    <?php
-//					var_dump($_GET);
+
+					include_once "data.php";
+
                     if(isset($_GET["todo"])){
                         $todo = $_GET["todo"];
                         switch ($todo) {
@@ -37,55 +48,22 @@
                                 echo "САЙТ ПОЛЕЗНЫХ УТИЛИТ";
                                 break;
 							case 'project':{
-								echo "<table>
-									<tr>
-										<td>001</td>
-										<td>ЭСКФ-2</td>
-										<td>Ковалев ВБ</td>
-									<tr>
-									</tr>
-										<td>002</td>
-										<td>ВЭН</td>
-										<td>Балаков ПЮ</td>
-									</tr>
-								</table>";
+								$sql_qs = "SELECT * FROM project_project";
+								$result = $db_connection->query($sql_qs);
+								echo "<table>";
+								echo "<thead><tr><th></th><th>ID</th><th>НАЗВАНИЕ</th><th>ИНФОРМАЦИЯ</th><th>ПРИМЕЧАНИЕ</th></tr></thead>";
+								while($row = $result->fetch()){
+									$id = $row['id'];
+									$name = $row['name'];
+									$note = $row['note'];
+									$info = $row['info'];
+									echo "<tr><td><input type=\"radio\"></input></td><td>$id</td><td>$name</td><td>$note</td><td>$info</td></tr>";
+								}
+								echo "</table>";
 							}
 								break;
 								case 'checklist':{
-									echo "<table>
-<tr><td>ДАТА</td><td>АВТОР</td><td>ПРОЕКТ</td><td>ОБЪЕКТ</td><td>РАЗДЕЛ/ЭТАП</td><td>ЗАДАЧА</td><td>ОТВЕСТВ</td><td>СТАТУС</td><td>ПЛАН</td><td>
-<tr><td>08.08.22</td><td>Ковалев ВБ</td><td>Уралэнергосбыт: Келлогг Псков</td><td></td><td>ПИР</td><td>ТРП</td><td>Беликов М</td><td>выполнено</td><td></td><td>
-<tr><td>29.08.22</td><td>Ковалев ВБ</td><td>Уралэнергосбыт: Келлогг Псков</td><td></td><td>ПИР</td><td>ЭД</td><td>Беликов М</td><td>выполнено</td><td></td><td>
-<tr><td>08.08.22</td><td>Ковалев ВБ</td><td>Уралэнергосбыт: Келлогг Псков</td><td></td><td>ПИР</td><td>техрешение установки i-tor</td><td>Ковалев ВБ</td><td>выполнено</td><td></td><td>
-<tr><td>08.08.22</td><td>Ковалев ВБ</td><td>Уралэнергосбыт: Келлогг Псков</td><td></td><td>ПИР</td><td>документ: задание заводу на ШУ</td><td>Ковалев ВБ</td><td>отменено</td><td></td><td>
-<tr><td>08.08.22</td><td>Ковалев ВБ</td><td>Уралэнергосбыт: Келлогг Воронеж</td><td></td><td>ПИР</td><td>утвердить варианты реализации АИИС</td><td>Ковалев ВБ</td><td>выполнено</td><td></td><td>
-<tr><td>08.08.22</td><td>Ковалев ВБ</td><td>Уралэнергосбыт: Келлогг Воронеж</td><td></td><td>ПИР</td><td>ТРП</td><td>Беликов М</td><td>выполнено</td><td></td><td>
-<tr><td>08.08.22</td><td>Ковалев ВБ</td><td>Уралэнергосбыт: Келлогг Воронеж</td><td></td><td>ТКП</td><td>сделать ТКП на шинный мост</td><td>Ковалев ВБ</td><td>выполнено</td><td></td><td>
-<tr><td>08.08.22</td><td>Ковалев ВБ</td><td>Уралэнергосбыт: Кирса</td><td></td><td>ППО</td><td>отчет о ППО</td><td>Ковалев ВБ</td><td>выполнено</td><td></td><td>
-<tr><td>08.08.22</td><td>Ковалев ВБ</td><td>Уралэнергосбыт: Кирса</td><td></td><td>ППО</td><td>Техническое решение ПКУ 27,5</td><td>Ковалев ВБ</td><td>выполнено</td><td></td><td>
-<tr><td>24.08.22</td><td>Ковалев ВБ</td><td>Уралэнергосбыт: Кирса</td><td></td><td>ПИР</td><td>ТРП</td><td>Беликов М</td><td>выполнено</td><td></td><td>
-<tr><td>08.08.22</td><td>Ковалев ВБ</td><td>ЭСКФ-2</td><td>Сочи</td><td>ППО</td><td>схема</td><td>Ковалев ВБ</td><td>выполнено</td><td></td><td>
-<tr><td>26.07.22</td><td>Балаков ПЮ</td><td>ЭСКФ-2</td><td>Сочи</td><td> -</td><td>выводить Созыкину полностью</td><td> -</td><td>выполнено</td><td></td><td>
-<tr><td>24.08.22</td><td>Ковалев ВБ</td><td>ЭСКФ-2</td><td>Сочи</td><td>ПНР</td><td>комплектация</td><td>Ковалев ВБ</td><td>выполнено</td><td></td><td>
-<tr><td>08.08.22</td><td>Ковалев ВБ</td><td>ЭСКФ-2</td><td>Сочи</td><td>МО</td><td>новая ТП</td><td>Ковалев ВБ</td><td>выполнено</td><td></td><td>
-<tr><td>08.08.22</td><td>Ковалев ВБ</td><td>ЭСКФ-2</td><td>Самара</td><td>МО</td><td>документы сч ТТ ТН, фото сч есть</td><td>Ковалев ВБ</td><td>отменено</td><td></td><td>
-<tr><td>08.08.22</td><td>Ковалев ВБ</td><td>ЭСКФ-2</td><td>Самара</td><td>ППО</td><td>фотоотчет</td><td>Ковалев ВБ</td><td>выполнено</td><td></td><td>
-<tr><td>24.08.22</td><td>Ковалев ВБ</td><td>ЭСКФ-2</td><td>Самара</td><td>Комплектация</td><td>ШС, материалы</td><td>Ковалев ВБ</td><td>выполнено</td><td></td><td>
-<tr><td>24.08.22</td><td>Ковалев ВБ</td><td>ЭСКФ-2</td><td>Самара</td><td>МНР</td><td>2ТУ ЯСН + связь</td><td>Ковалев ВБ</td><td>выполнено</td><td></td><td>
-<tr><td>08.08.22</td><td>Ковалев ВБ</td><td>ЭСКФ-2</td><td>Волгоград</td><td>МО</td><td>организовать поверку счетчиков</td><td>Ковалев ВБ</td><td>выполнено</td><td></td><td>
-<tr><td>24.08.22</td><td>Балаков ПЮ</td><td>ЭСКФ-2</td><td>Волгоград</td><td>МО</td><td>поверка счетчиков</td><td>Ковалев ВБ</td><td>отменено</td><td></td><td>
-<tr><td>24.08.22</td><td>Ковалев ВБ</td><td>ЭСКФ-2</td><td>Волгоград</td><td>МНР</td><td>связь на ТП</td><td>Ковалев ВБ</td><td>отменено</td><td></td><td>
-<tr><td>24.08.22</td><td>Балаков ПЮ</td><td>ЭСКФ-2</td><td>Нновгород</td><td>МО</td><td>поверка счетчиков, поверка ТТ</td><td>Ковалев ВБ</td><td>выполнено</td><td></td><td>
-<tr><td>08.08.22</td><td>Ковалев ВБ</td><td>ЭСКФ-2</td><td>Новая Рига</td><td>МО</td><td>поверка ТТ, Ростест </td><td>Ковалев ВБ</td><td>выполнено</td><td></td><td>
-<tr><td>08.08.22</td><td>Ковалев ВБ</td><td>ЭСКФ-2</td><td>Новая Рига</td><td>МНР</td><td>монтировать учет на ЯСН</td><td>Ковалев ВБ</td><td>выполнено</td><td></td><td>
-<tr><td>08.08.22</td><td>Ковалев ВБ</td><td>ЭСКФ-2</td><td>Выборг</td><td>МНР</td><td>наладить опрос сч 106</td><td>Ковалев ВБ</td><td>выполнено</td><td></td><td>
-<tr><td>24.08.22</td><td>Балаков ПЮ</td><td>ЭСКФ-2</td><td>Выборг</td><td>МНР</td><td>завести в АИИС</td><td>Балаков ПЮ</td><td>выполнено</td><td></td><td>
-<tr><td>24.08.22</td><td>Балаков ПЮ</td><td>ЭСКФ-2</td><td>Выборг</td><td>МО</td><td>изготовить паспорта ТТ</td><td>Ковалев ВБ</td><td>отменено</td><td></td><td>
-<tr><td>05.09.22</td><td>Балаков ПЮ</td><td>ЭСКФ-2</td><td>Выборг</td><td>МО</td><td>организовать поверку ТТ</td><td>Ковалев ВБ</td><td>отменено</td><td></td><td>
-<tr><td>08.08.22</td><td>Ковалев ВБ</td><td>ЭСКФ-2</td><td>Липецк</td><td>МО</td><td>организовать фото ТТ ТН</td><td>Ковалев ВБ</td><td>отменено</td><td></td><td>
-<tr><td>24.08.22</td><td>Балаков ПЮ</td><td>ЭСКФ-2</td><td>Липецк</td><td>МО</td><td>изготовить паспорта ТТ, ТН</td><td>Ковалев ВБ</td><td>отменено</td><td></td><td>
-<tr><td>14.09.22</td><td>Балаков ПЮ</td><td>ЭСКФ-2</td><td>Липецк</td><td>МО</td><td>поверка ТТ ТН</td><td>Ковалев ВБ</td><td>отменено</td><td></td><td>
-</table>";
+									echo text_data();
 								}
                             default:
                                 // code...
